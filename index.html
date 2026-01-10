@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuadrante de Limpieza 2026</title>
+    <style>
+        :root {
+            --puesto1: #DCE6F1; /* Azul - Krystel */
+            --puesto2: #FDEADA; /* Naranja - Alberto */
+            --puesto3: #EBF1DE; /* Verde - Israel */
+            --bg: #f4f7f6;
+            --text: #2c3e50;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 { font-weight: 600; margin-bottom: 10px; color: #1a252f; }
+        .subtitle { margin-bottom: 30px; color: #7f8c8d; font-size: 0.9em; }
+
+        .calendar-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .week-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid #e1e8ed;
+        }
+
+        .week-card.current {
+            border: 2px solid #3498db;
+            background: #ffffff;
+            box-shadow: 0 10px 20px rgba(52,152,219,0.15);
+            transform: scale(1.03);
+            z-index: 10;
+        }
+
+        .week-header {
+            font-weight: 700;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #95a5a6;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .roles {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .role-box {
+            padding: 12px 5px;
+            border-radius: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .role-name { font-weight: 700; font-size: 0.9em; }
+        .role-task { font-size: 0.7em; text-transform: uppercase; font-weight: 600; opacity: 0.7; }
+
+        /* Colores de fondo */
+        .bg-krystel { background-color: var(--puesto1); }
+        .bg-alberto { background-color: var(--puesto2); }
+        .bg-israel { background-color: var(--puesto3); }
+
+        .current-tag {
+            background: #3498db;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            letter-spacing: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Limpieza 2026</h1>
+    <div class="subtitle" id="current-date-display"></div>
+    <div class="calendar-container" id="calendar"></div>
+
+    <script>
+        const names = ["Krystel", "Alberto", "Israel"];
+        const tasks = ["Cocina", "Baño", "Pasillo"];
+        
+        // Inicio del cuadrante (Lunes 29 Dic 2025)
+        const startDate = new Date(2025, 11, 29); 
+        const today = new Date();
+
+        document.getElementById('current-date-display').innerText = `Hoy es ${today.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+
+        function generateCalendar() {
+            const container = document.getElementById('calendar');
+            let currentWeekElement = null;
+
+            for (let i = 0; i < 53; i++) {
+                const weekStart = new Date(startDate);
+                weekStart.setDate(startDate.getDate() + (i * 7));
+                
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+
+                const isCurrentWeek = (today >= weekStart && today <= weekEnd);
+                
+                // Rotación basada en tu imagen
+                const p1 = names[(0 + i * 2) % 3];
+                const p2 = names[(1 + i * 2) % 3];
+                const p3 = names[(2 + i * 2) % 3];
+
+                const weekCard = document.createElement('div');
+                weekCard.className = `week-card ${isCurrentWeek ? 'current' : ''}`;
+                if (isCurrentWeek) currentWeekElement = weekCard;
+
+                weekCard.innerHTML = `
+                    <div class="week-header">
+                        <span>Semana ${i + 1} • ${weekStart.getDate()}/${weekStart.getMonth()+1}</span>
+                        ${isCurrentWeek ? '<span class="current-tag">SEMANA ACTUAL</span>' : ''}
+                    </div>
+                    <div class="roles">
+                        <div class="role-box bg-${p1.toLowerCase()}">
+                            <span class="role-task">${tasks[0]}</span>
+                            <span class="role-name">${p1}</span>
+                        </div>
+                        <div class="role-box bg-${p2.toLowerCase()}">
+                            <span class="role-task">${tasks[1]}</span>
+                            <span class="role-name">${p2}</span>
+                        </div>
+                        <div class="role-box bg-${p3.toLowerCase()}">
+                            <span class="role-task">${tasks[2]}</span>
+                            <span class="role-name">${p3}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(weekCard);
+            }
+
+            if (currentWeekElement) {
+                setTimeout(() => {
+                    currentWeekElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500);
+            }
+        }
+
+        generateCalendar();
+    </script>
+</body>
+</html>
