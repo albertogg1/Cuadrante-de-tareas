@@ -6,9 +6,9 @@
     <title>Cuadrante de Limpieza 2026</title>
     <style>
         :root {
-            --puesto1: #DCE6F1; /* Azul - Krystel */
-            --puesto2: #FDEADA; /* Naranja - Alberto */
-            --puesto3: #EBF1DE; /* Verde - Israel */
+            --puesto1: #DCE6F1;
+            --puesto2: #FDEADA;
+            --puesto3: #EBF1DE;
             --bg: #f4f7f6;
             --text: #2c3e50;
         }
@@ -107,25 +107,32 @@
         const tasks = ["Cocina", "Baño", "Pasillo"];
         
         // Inicio del cuadrante (Lunes 29 Dic 2025)
-        const startDate = new Date(2025, 11, 29); 
+        const startDate = new Date(2025, 11, 29); // inicio: 29-dic-2025
         const today = new Date();
+        today.setHours(0,0,0,0);
 
-        document.getElementById('current-date-display').innerText = `Hoy es ${today.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+        let simulatedToday = new Date(today);
+        // Para pruebas: descomenta la siguiente línea para simular otra fecha
+        // simulatedToday = new Date(2026, 0, 15);
+        function updateDisplayDate(d) {
+            document.getElementById('current-date-display').innerText = `Hoy es ${d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })}`;
+        }
+
+        updateDisplayDate(simulatedToday);
 
         function generateCalendar() {
             const container = document.getElementById('calendar');
             let currentWeekElement = null;
-
             for (let i = 0; i < 53; i++) {
                 const weekStart = new Date(startDate);
-                weekStart.setDate(startDate.getDate() + (i * 7));
-                
-                const weekEnd = new Date(weekStart);
-                weekEnd.setDate(weekStart.getDate() + 6);
+                    weekStart.setDate(weekStart.getDate() + (i * 7));
+                    weekStart.setHours(0,0,0,0);
 
-                const isCurrentWeek = (today >= weekStart && today <= weekEnd);
-                
-                // Rotación basada en tu imagen
+                    const weekEnd = new Date(weekStart);
+                    weekEnd.setDate(weekStart.getDate() + 6);
+                    weekEnd.setHours(23,59,59,999);
+
+                    const isCurrentWeek = (simulatedToday >= weekStart && simulatedToday <= weekEnd);
                 const p1 = names[(0 + i * 2) % 3];
                 const p2 = names[(1 + i * 2) % 3];
                 const p3 = names[(2 + i * 2) % 3];
